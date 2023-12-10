@@ -198,7 +198,7 @@ void mqtt_connect()
         } else {
             MQTT_LOG("MQTT", "Error code: " + String(mqtt_client.state()));
             mqtt_retry++;
-            if(mqtt_retry == 25)
+            if(mqtt_retry == 10)
             {
                 MQTT_LOG("MQTT", "Failed to connect to MQTT");
                 give_up = true;

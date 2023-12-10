@@ -67,6 +67,8 @@ void pin_on(uint8_t pin)
   R_LOG("PC", "Pin " + String(pin) + " on");
   pinMode(pin, OUTPUT);
   digitalWrite(pin, HIGH);
+  String addr = String(MQTT_ID) + "/" + String(pin);
+  mqtt_lib.mqtt_publish(addr, "on");
   /** Keep track of all pins used for fail safe */
   bool found = tracked_pins.find(pin) != tracked_pins.end();
   if(!found)
@@ -86,6 +88,8 @@ void pin_off(uint8_t pin)
   R_LOG("PC", "Pin " + String(pin) + " off");
   pinMode(pin, OUTPUT);
   digitalWrite(pin, LOW);
+  String addr = String(MQTT_ID) + "/" + String(pin);
+  mqtt_lib.mqtt_publish(addr, "off");
 }
 
 /**
