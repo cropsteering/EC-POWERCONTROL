@@ -33,5 +33,6 @@ extern const char* MQTT_ID;
 
 void pin_on(uint8_t pin);
 void pin_off(uint8_t pin);
+void pin_fail();
 
 #endif

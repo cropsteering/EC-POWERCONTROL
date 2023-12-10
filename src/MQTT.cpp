@@ -162,6 +162,7 @@ void wifi_connect()
         { 
             Serial.println(" Failed to connect to WiFi");
             give_up = true;
+            pin_fail();
             break; 
         }
         MQTT_LOG("WiFi", "Retrying");
@@ -201,6 +202,7 @@ void mqtt_connect()
             {
                 MQTT_LOG("MQTT", "Failed to connect to MQTT");
                 give_up = true;
+                pin_fail();
                 break; 
             }
             delay(5000);

@@ -12,9 +12,12 @@
 /** Include libraries here */
 #include <Arduino.h>
 #include <MQTT.h>
+#include <set>
 
 /** MQTT Lib */
 MQTT mqtt_lib;
+/** Tracked pins */
+std::set<uint8_t> tracked_pins;
 /** Turn on/off debug output */
 #define DEBUG 1
 
@@ -54,18 +57,47 @@ void loop()
   mqtt_lib.mqtt_loop();
 }
 
+/**
+ * @brief Turn on pin and track for fail safe
+ * 
+ * @param pin 
+ */
 void pin_on(uint8_t pin)
 {
   R_LOG("PC", "Pin " + String(pin) + " on");
   pinMode(pin, OUTPUT);
   digitalWrite(pin, HIGH);
+  /** Keep track of all pins used for fail safe */
+  bool found = tracked_pins.find(pin) != tracked_pins.end();
+  if(!found)
+  {
+    R_LOG("PC", "Added tracked pin " + String(pin));
+    tracked_pins.insert(pin);
+  }
 }
 
+/**
+ * @brief Turn pin off
+ * 
+ * @param pin 
+ */
 void pin_off(uint8_t pin)
 {
   R_LOG("PC", "Pin " + String(pin) + " off");
   pinMode(pin, OUTPUT);
   digitalWrite(pin, LOW);
+}
+
+/**
+ * @brief Fail safe for tracked pins
+ * 
+ */
+void pin_fail()
+{
+  for (auto& str : tracked_pins)
+  {
+    digitalWrite(str, LOW);
+  }
 }
 
 /**
